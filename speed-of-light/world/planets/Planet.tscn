@@ -1,0 +1,34 @@
+[gd_scene load_steps=6 format=3 uid="uid://dcx4pnt0kt3gn"]
+
+[ext_resource type="Script" uid="uid://ddoycdpgl8wya" path="res://world/planets/planet.gd" id="1_pkd2e"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0knnf"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 0.41, 0.34166664, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_pkd2e"]
+material = SubResource("StandardMaterial3D_0knnf")
+radius = 3.0
+height = 6.0
+radial_segments = 16
+rings = 8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pkd2e"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0.16470002, 0.22437, 0.27, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_0knnf"]
+material = SubResource("StandardMaterial3D_pkd2e")
+top_radius = 5.0
+bottom_radius = 5.0
+height = 0.1
+
+[node name="Planet" type="StaticBody3D"]
+script = ExtResource("1_pkd2e")
+mass = 200.0
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_pkd2e")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
+mesh = SubResource("CylinderMesh_0knnf")

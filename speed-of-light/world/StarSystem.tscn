@@ -1,27 +1,88 @@
-[gd_scene load_steps=5 format=3 uid="uid://dwolhykk0y7ui"]
+[gd_scene load_steps=10 format=3 uid="uid://dwolhykk0y7ui"]
 
 [ext_resource type="PackedScene" uid="uid://bs8425q4yrea2" path="res://comet/Comet.tscn" id="1_26tmq"]
+[ext_resource type="Script" uid="uid://b2rqq10rx56vc" path="res://world/star_system.gd" id="1_evqdb"]
+[ext_resource type="Shader" uid="uid://cooa1b3ar17sw" path="res://world/sky/starry_sky.gdshader" id="2_frprf"]
+[ext_resource type="PackedScene" uid="uid://w1psgvc7ptbx" path="res://world/stars/Star.tscn" id="3_6cfv3"]
+[ext_resource type="PackedScene" uid="uid://dcx4pnt0kt3gn" path="res://world/planets/Planet.tscn" id="4_rca7r"]
+[ext_resource type="PackedScene" uid="uid://c7q63bor5yfyf" path="res://HUD/CometHUD.tscn" id="5_xf21s"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_26tmq"]
-sky_top_color = Color(0.0518, 0.06944001, 0.14, 1)
-sky_horizon_color = Color(0.050980393, 0.07058824, 0.14117648, 1)
-ground_bottom_color = Color(0.050980393, 0.07058824, 0.14117648, 1)
-ground_horizon_color = Color(0.050980393, 0.07058824, 0.14117648, 1)
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6cfv3"]
+shader = ExtResource("2_frprf")
+shader_parameter/sky_color = Color(0.03, 0.05, 0.11, 1)
+shader_parameter/star_base_color = Color(0.8, 1, 0.3, 1)
+shader_parameter/star_hue_offset = 0.6
+shader_parameter/star_intensity = 0.08
+shader_parameter/star_twinkle_speed = 0.8
+shader_parameter/star_twinkle_intensity = 0.2
+shader_parameter/layer_scale = 20.0
+shader_parameter/layer_scale_step = 10.0
+shader_parameter/layers_count = 3
 
-[sub_resource type="Sky" id="Sky_frprf"]
-sky_material = SubResource("ProceduralSkyMaterial_26tmq")
+[sub_resource type="Sky" id="Sky_rca7r"]
+sky_material = SubResource("ShaderMaterial_6cfv3")
 
 [sub_resource type="Environment" id="Environment_6cfv3"]
 background_mode = 2
-sky = SubResource("Sky_frprf")
+sky = SubResource("Sky_rca7r")
+ambient_light_source = 1
+reflected_light_source = 1
 
 [node name="StarSystem" type="Node3D"]
-
-[node name="Comet" parent="." instance=ExtResource("1_26tmq")]
+script = ExtResource("1_evqdb")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_6cfv3")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.0027925177, 0.9999961, 0, -0.9999961, -0.0027925177, 0, 1.5918078, 0)
-shadow_enabled = true
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.7423487, 0.18235253, 0.6447217, -0.6571153, 0.38605165, 0.6474285, -0.13083562, -0.90427417, 0.40641156, 0, 448.87976, 0)
+sky_mode = 1
+
+[node name="Comet" parent="." instance=ExtResource("1_26tmq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155.96133, 71.02955, -177.66962)
+
+[node name="Stars" type="Node3D" parent="."]
+
+[node name="Star" parent="Stars" instance=ExtResource("3_6cfv3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.014961, 0, 40.59831)
+collision_layer = 0
+collision_mask = 0
+
+[node name="Star2" parent="Stars" instance=ExtResource("3_6cfv3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 704.8041, 579.67096, 727.5653)
+
+[node name="Star3" parent="Stars" instance=ExtResource("3_6cfv3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -85.04552, -68.32595, -259.45325)
+visible = false
+
+[node name="Star4" parent="Stars" instance=ExtResource("3_6cfv3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -112.22261, 158.10257, -51.62253)
+visible = false
+
+[node name="Star5" parent="Stars" instance=ExtResource("3_6cfv3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -750.79565, -350.50665, -205.78586)
+visible = false
+
+[node name="Planets" type="Node3D" parent="."]
+visible = false
+
+[node name="Planet" parent="Planets" instance=ExtResource("4_rca7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -226.81001, 102.72876, 139.99799)
+
+[node name="Planet2" parent="Planets" instance=ExtResource("4_rca7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130.90118, -319.28253, 288.06165)
+
+[node name="Planet3" parent="Planets" instance=ExtResource("4_rca7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -232.27333, 126.62451, -248.57365)
+
+[node name="Planet4" parent="Planets" instance=ExtResource("4_rca7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -159.22484, -127.87416, 212.06523)
+
+[node name="Planet5" parent="Planets" instance=ExtResource("4_rca7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 738.759, 576.3323, 228.573)
+
+[node name="Planet6" parent="Planets" instance=ExtResource("4_rca7r")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -146.4248, 68.11861, 96.195)
+
+[node name="CometHUDLayer" parent="." instance=ExtResource("5_xf21s")]
+unique_name_in_owner = true

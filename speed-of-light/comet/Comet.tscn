@@ -15,20 +15,27 @@ size = Vector3(0.4, 0.4, 0.4)
 
 [node name="Comet" type="CharacterBody3D"]
 script = ExtResource("1_xiij3")
+mass = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("SphereShape3D_xiij3")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="MeshRotator" type="Node3D" parent="."]
+transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="MeshRotator"]
 transform = Transform3D(-0.016021444, 0.9998717, 0, -0.9998717, -0.016021444, 0, 0, 0, 1, -1.1310803, 0, 0)
 mesh = SubResource("CylinderMesh_xiij3")
+skeleton = NodePath("../..")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="MeshRotator"]
 transform = Transform3D(-0.016021444, 0.9998717, 0, -0.9998717, -0.016021444, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("SphereMesh_se40t")
+skeleton = NodePath("../..")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="."]
+[node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshRotator"]
 transform = Transform3D(1, 0, 0, 0, 0.47222775, -0.8814766, 0, 0.8814766, 0.47222775, -1.1848229, 0, 0)
 mesh = SubResource("BoxMesh_se40t")
+skeleton = NodePath("../..")
 
 [node name="CameraOrbit" parent="." instance=ExtResource("2_se40t")]

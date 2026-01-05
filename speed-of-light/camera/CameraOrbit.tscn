@@ -6,6 +6,7 @@
 script = ExtResource("1_casfq")
 
 [node name="SpringArm3D" type="SpringArm3D" parent="."]
+collision_mask = 0
 spring_length = 10.0
 
 [node name="Camera3D" type="Camera3D" parent="SpringArm3D"]

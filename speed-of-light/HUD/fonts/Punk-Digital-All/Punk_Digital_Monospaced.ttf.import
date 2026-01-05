@@ -1,0 +1,41 @@
+[remap]
+
+importer="font_data_dynamic"
+type="FontFile"
+uid="uid://bhfugwt4s7drq"
+path="res://.godot/imported/Punk_Digital_Monospaced.ttf-83a53c7d3f7c01b9a8f7b654452092dd.fontdata"
+
+[deps]
+
+source_file="res://HUD/fonts/Punk-Digital-All/Punk_Digital_Monospaced.ttf"
+dest_files=["res://.godot/imported/Punk_Digital_Monospaced.ttf-83a53c7d3f7c01b9a8f7b654452092dd.fontdata"]
+
+[params]
+
+Rendering=null
+antialiasing=0
+generate_mipmaps=false
+disable_embedded_bitmaps=true
+multichannel_signed_distance_field=false
+msdf_pixel_range=8
+msdf_size=48
+allow_system_fallback=true
+force_autohinter=false
+modulate_color_glyphs=false
+hinting=0
+subpixel_positioning=4
+keep_rounding_remainders=true
+oversampling=0.0
+Fallbacks=null
+fallbacks=[]
+Compress=null
+compress=true
+preload=[{
+"chars": [],
+"glyphs": [],
+"name": "New Configuration",
+"size": Vector2i(16, 0)
+}]
+language_support={}
+script_support={}
+opentype_features={}

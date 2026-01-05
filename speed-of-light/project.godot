@@ -23,6 +23,17 @@ window/size/mode=2
 
 enabled=PackedStringArray()
 
+[global_group]
+
+GravitationalPullers="Entities that apply gravity to the comet"
+
+[importer_defaults]
+
+font_data_dynamic={
+&"antialiasing": 0,
+&"hinting": 0
+}
+
 [input]
 
 RotateCameraMouse={

@@ -1,0 +1,10 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://bk3xwao2qwxm8"]
+
+[ext_resource type="FontFile" uid="uid://cday0bmfh81do" path="res://HUD/fonts/Endless-Love-All/Endless_Love.ttf" id="1_a7008"]
+
+[resource]
+default_font = ExtResource("1_a7008")
+MarginContainer/constants/margin_bottom = 10
+MarginContainer/constants/margin_left = 10
+MarginContainer/constants/margin_right = 10
+MarginContainer/constants/margin_top = 10

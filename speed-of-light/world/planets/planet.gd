@@ -1,0 +1,2 @@
+extends GravitationalPuller
+class_name Planet
