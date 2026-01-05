@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://dwolhykk0y7ui"]
+
+[ext_resource type="PackedScene" uid="uid://bs8425q4yrea2" path="res://comet/Comet.tscn" id="1_26tmq"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_26tmq"]
+sky_top_color = Color(0.0518, 0.06944001, 0.14, 1)
+sky_horizon_color = Color(0.050980393, 0.07058824, 0.14117648, 1)
+ground_bottom_color = Color(0.050980393, 0.07058824, 0.14117648, 1)
+ground_horizon_color = Color(0.050980393, 0.07058824, 0.14117648, 1)
+
+[sub_resource type="Sky" id="Sky_frprf"]
+sky_material = SubResource("ProceduralSkyMaterial_26tmq")
+
+[sub_resource type="Environment" id="Environment_6cfv3"]
+background_mode = 2
+sky = SubResource("Sky_frprf")
+
+[node name="StarSystem" type="Node3D"]
+
+[node name="Comet" parent="." instance=ExtResource("1_26tmq")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_6cfv3")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.0027925177, 0.9999961, 0, -0.9999961, -0.0027925177, 0, 1.5918078, 0)
+shadow_enabled = true
