@@ -1,17 +1,18 @@
 extends Node3D
+class_name CameraOrbit
 
 # Simple orbit camera rig control script
 
 # control variables
-@export var maxZoom: float = 20
+@export var maxZoom: float = 60
 @export var minZoom: float = 4
 @export var zoomStep: float = 2
 @export var zoomYStep: float = 0.15
 @export var verticalSensitivity: float = 0.002
 @export var horizontalSensitivity: float = 0.002
-@export var camYOffset: float = 4.0
 @export var camLerpSpeed: float = 16.0
 
+@onready var camera: Camera3D = %Camera3D
 # private variables
 @onready var _springArm : SpringArm3D = $SpringArm3D
 @onready var _curZoom : float = maxZoom
@@ -20,6 +21,9 @@ extends Node3D
 
 func _ready() -> void:
 	pass
+
+func make_current() -> void:
+	camera.make_current()
 
 func _input(event) -> void:
 	if event is InputEventMouseMotion && _is_pressed:
@@ -40,10 +44,8 @@ func _input(event) -> void:
 		if event.is_pressed():
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP and _curZoom > minZoom:
 				_curZoom -= zoomStep
-				camYOffset -= zoomYStep
 			if event.button_index == MOUSE_BUTTON_WHEEL_DOWN and _curZoom < maxZoom:
 				_curZoom += zoomStep
-				camYOffset += zoomYStep
 
 func _physics_process(delta) -> void:
 	# zoom the camera accordingly

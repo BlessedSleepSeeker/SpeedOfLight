@@ -1,0 +1,50 @@
+[gd_scene load_steps=3 format=3 uid="uid://cdb7a5ryj70ke"]
+
+[ext_resource type="Script" uid="uid://bma7feq7vexb2" path="res://HUD/debug_hud.gd" id="1_4qn3b"]
+[ext_resource type="Theme" uid="uid://bk3xwao2qwxm8" path="res://HUD/HUD_theme.tres" id="2_ls625"]
+
+[node name="DebugHUDLayer" type="CanvasLayer"]
+script = ExtResource("1_4qn3b")
+
+[node name="Margin" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_ls625")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Margin/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Margin/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="IsPausedLabel" type="RichTextLabel" parent="Margin/VBoxContainer/HBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "simulation state"
+fit_content = true
+
+[node name="FPSLabel" type="RichTextLabel" parent="Margin/VBoxContainer/HBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "FPS"
+fit_content = true
+
+[node name="PFPSLabel" type="RichTextLabel" parent="Margin/VBoxContainer/HBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "PFPS"
+fit_content = true

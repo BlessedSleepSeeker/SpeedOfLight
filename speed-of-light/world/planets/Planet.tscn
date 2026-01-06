@@ -24,6 +24,7 @@ bottom_radius = 5.0
 height = 0.1
 
 [node name="Planet" type="StaticBody3D"]
+collision_layer = 3
 script = ExtResource("1_pkd2e")
 mass = 200.0
 

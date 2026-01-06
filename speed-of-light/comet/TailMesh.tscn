@@ -16,3 +16,9 @@ script = ExtResource("1_xyhup")
 [node name="TailMesh" type="CSGMesh3D" parent="."]
 mesh = SubResource("BoxMesh_24vei")
 material = SubResource("StandardMaterial3D_24vei")
+
+[node name="FadeTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+wait_time = 60.0
+one_shot = true
+autostart = true

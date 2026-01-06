@@ -1,19 +1,27 @@
-[gd_scene load_steps=7 format=3 uid="uid://bs8425q4yrea2"]
+[gd_scene load_steps=8 format=3 uid="uid://bs8425q4yrea2"]
 
 [ext_resource type="Script" uid="uid://c04ppl8c5jc2w" path="res://comet/comet.gd" id="1_xiij3"]
+[ext_resource type="Material" uid="uid://clchh2kla8gsp" path="res://comet/material/base_comet_material.tres" id="2_g1h47"]
 [ext_resource type="PackedScene" uid="uid://pqykoxve28eu" path="res://camera/CameraOrbit.tscn" id="2_se40t"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_xiij3"]
+radius = 0.72502416
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_xiij3"]
+material = ExtResource("2_g1h47")
 bottom_radius = 0.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_se40t"]
+material = ExtResource("2_g1h47")
+radius = 0.6
+height = 1.2
 
 [sub_resource type="BoxMesh" id="BoxMesh_se40t"]
+material = ExtResource("2_g1h47")
 size = Vector3(0.4, 0.4, 0.4)
 
 [node name="Comet" type="CharacterBody3D"]
+collision_layer = 3
 script = ExtResource("1_xiij3")
 mass = 1.0
 
@@ -24,7 +32,8 @@ shape = SubResource("SphereShape3D_xiij3")
 transform = Transform3D(1.1924881e-08, 0, -1, 0, 1, 0, 1, 0, 1.1924881e-08, 0, 0, 0)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MeshRotator"]
-transform = Transform3D(-0.016021444, 0.9998717, 0, -0.9998717, -0.016021444, 0, 0, 0, 1, -1.1310803, 0, 0)
+unique_name_in_owner = true
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, -1.1310803, 0, 0)
 mesh = SubResource("CylinderMesh_xiij3")
 skeleton = NodePath("../..")
 
@@ -34,8 +43,9 @@ mesh = SubResource("SphereMesh_se40t")
 skeleton = NodePath("../..")
 
 [node name="MeshInstance3D3" type="MeshInstance3D" parent="MeshRotator"]
-transform = Transform3D(1, 0, 0, 0, 0.47222775, -0.8814766, 0, 0.8814766, 0.47222775, -1.1848229, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 0.47222775, -0.8814766, 0, 0.8814766, 0.47222775, -1, 0, 0)
 mesh = SubResource("BoxMesh_se40t")
 skeleton = NodePath("../..")
 
 [node name="CameraOrbit" parent="." instance=ExtResource("2_se40t")]
+unique_name_in_owner = true

@@ -1,0 +1,6 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://clchh2kla8gsp"]
+
+[ext_resource type="Material" uid="uid://d3upegy2sk64a" path="res://camera/shaders/highlight_material.tres" id="1_51uax"]
+
+[resource]
+next_pass = ExtResource("1_51uax")

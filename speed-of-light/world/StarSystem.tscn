@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dwolhykk0y7ui"]
+[gd_scene load_steps=12 format=3 uid="uid://dwolhykk0y7ui"]
 
 [ext_resource type="PackedScene" uid="uid://bs8425q4yrea2" path="res://comet/Comet.tscn" id="1_26tmq"]
 [ext_resource type="Script" uid="uid://b2rqq10rx56vc" path="res://world/star_system.gd" id="1_evqdb"]
@@ -6,6 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://w1psgvc7ptbx" path="res://world/stars/Star.tscn" id="3_6cfv3"]
 [ext_resource type="PackedScene" uid="uid://dcx4pnt0kt3gn" path="res://world/planets/Planet.tscn" id="4_rca7r"]
 [ext_resource type="PackedScene" uid="uid://c7q63bor5yfyf" path="res://HUD/CometHUD.tscn" id="5_xf21s"]
+[ext_resource type="PackedScene" uid="uid://djl0k2l0ko8qt" path="res://world/camera_selector/CameraSelector.tscn" id="7_atutu"]
+[ext_resource type="PackedScene" uid="uid://cdb7a5ryj70ke" path="res://HUD/DebugHUD.tscn" id="7_iuvtf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6cfv3"]
 shader = ExtResource("2_frprf")
@@ -85,4 +87,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 738.759, 576.3323, 228.573)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -146.4248, 68.11861, 96.195)
 
 [node name="CometHUDLayer" parent="." instance=ExtResource("5_xf21s")]
+unique_name_in_owner = true
+
+[node name="DebugHUDLayer" parent="." instance=ExtResource("7_iuvtf")]
+unique_name_in_owner = true
+
+[node name="CameraSelector" parent="." instance=ExtResource("7_atutu")]
 unique_name_in_owner = true

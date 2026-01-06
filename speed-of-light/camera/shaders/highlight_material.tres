@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://d3upegy2sk64a"]
+
+[ext_resource type="Shader" uid="uid://da1ef5cbwilur" path="res://camera/shaders/highlight_shader.gdshader" id="1_bj6g7"]
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_bj6g7")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+shader_parameter/outline_width = 10.0
