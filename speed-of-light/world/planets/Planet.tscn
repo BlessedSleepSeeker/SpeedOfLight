@@ -1,12 +1,17 @@
-[gd_scene load_steps=6 format=3 uid="uid://dcx4pnt0kt3gn"]
+[gd_scene load_steps=15 format=3 uid="uid://dcx4pnt0kt3gn"]
 
-[ext_resource type="Script" uid="uid://ddoycdpgl8wya" path="res://world/planets/planet.gd" id="1_pkd2e"]
+[ext_resource type="Script" uid="uid://b5kehyhy7wmdr" path="res://world/stars/star.gd" id="1_5m2jx"]
+[ext_resource type="Material" uid="uid://d3upegy2sk64a" path="res://camera/shaders/highlight_material.tres" id="2_bji2r"]
+[ext_resource type="PackedScene" uid="uid://pqykoxve28eu" path="res://camera/CameraOrbit.tscn" id="2_n3pod"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0knnf"]
+resource_local_to_scene = true
+next_pass = ExtResource("2_bji2r")
 vertex_color_use_as_albedo = true
 albedo_color = Color(0, 0.41, 0.34166664, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_pkd2e"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_0knnf")
 radius = 3.0
 height = 6.0
@@ -14,22 +19,124 @@ radial_segments = 16
 rings = 8
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pkd2e"]
+resource_local_to_scene = true
+next_pass = ExtResource("2_bji2r")
 vertex_color_use_as_albedo = true
 albedo_color = Color(0.16470002, 0.22437, 0.27, 1)
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_0knnf"]
+resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_pkd2e")
 top_radius = 5.0
 bottom_radius = 5.0
 height = 0.1
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_pkd2e"]
+radius = 3.2994585
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_5m2jx"]
+radius = 2.9586313
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_pkd2e"]
+height = 0.23669434
+radius = 5.0439453
+
+[sub_resource type="Animation" id="Animation_63mt3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_vp5b0"]
+resource_name = "deactivated"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.001, 0.001, 0.001)]
+}
+
+[sub_resource type="Animation" id="Animation_itf8h"]
+resource_name = "reactivate"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.001, 0.001, 0.001), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_63mt3"]
+_data = {
+&"RESET": SubResource("Animation_63mt3"),
+&"deactivate": SubResource("Animation_vp5b0"),
+&"reactivate": SubResource("Animation_itf8h")
+}
+
 [node name="Planet" type="StaticBody3D"]
 collision_layer = 3
-script = ExtResource("1_pkd2e")
-mass = 200.0
+script = ExtResource("1_5m2jx")
+randomize_rotation_on_load = true
+mass = 100.0
+deactivation_time_on_hit = 30.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
 mesh = SubResource("SphereMesh_pkd2e")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="MeshInstance3D"]
 mesh = SubResource("CylinderMesh_0knnf")
+
+[node name="MouseArea" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MouseArea"]
+shape = SubResource("SphereShape3D_pkd2e")
+
+[node name="Hitbox" type="Area3D" parent="."]
+unique_name_in_owner = true
+transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
+collision_mask = 0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("SphereShape3D_5m2jx")
+
+[node name="CollisionShape3D2" type="CollisionShape3D" parent="Hitbox"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.013000488, 0)
+shape = SubResource("CylinderShape3D_pkd2e")
+
+[node name="CameraOrbit" parent="." instance=ExtResource("2_n3pod")]
+unique_name_in_owner = true
+maxZoom = 400.0
+minZoom = 30.0
+zoomStep = 10.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_63mt3")
+}

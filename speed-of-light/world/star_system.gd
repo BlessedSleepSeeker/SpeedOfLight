@@ -24,6 +24,7 @@ func register_gravity_pullers() -> void:
 
 func _physics_process(_delta):
 	if _physics_on:
+		register_gravity_pullers()
 		for gravity_puller: GravitationalPuller in gravity_pullers:
 			if gravity_puller.is_visible_in_tree():
 				var gravity_pull: Vector3 = comet.calculate_gravity_pull(gravity_puller)
@@ -64,9 +65,14 @@ func _on_entity_selected(entity: Node3D) -> void:
 
 #endregion
 
+func flush_star_system() -> void:
+	comet.flush_pools()
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("Click"):
 		check_for_click()
 	if Input.is_action_just_pressed("TogglePhysics"):
 		toggle_physics()
+	if Input.is_action_just_pressed("ResetScene"):
+		flush_star_system()
+		get_tree().reload_current_scene()

@@ -55,18 +55,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 704.8041, 579.67096, 727.5653
 
 [node name="Star3" parent="Stars" instance=ExtResource("3_6cfv3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -85.04552, -68.32595, -259.45325)
-visible = false
 
 [node name="Star4" parent="Stars" instance=ExtResource("3_6cfv3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -112.22261, 158.10257, -51.62253)
-visible = false
 
 [node name="Star5" parent="Stars" instance=ExtResource("3_6cfv3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -750.79565, -350.50665, -205.78586)
-visible = false
 
 [node name="Planets" type="Node3D" parent="."]
-visible = false
 
 [node name="Planet" parent="Planets" instance=ExtResource("4_rca7r")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -226.81001, 102.72876, 139.99799)

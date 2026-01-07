@@ -9,10 +9,10 @@ class_name Comet
 
 @export var draw_tail: bool = true
 @export var tail_mesh: PackedScene = preload("res://comet/TailMesh.tscn")
-@export var tail_max_amount: int = 1000
+@export var tail_max_amount: int = 1200
 
-@export var ray_length: float = 20
-@export var ray_direction_amount: int = 20
+@export var ray_length: float = 60
+@export var ray_direction_amount: int = 60
 @export var aiming_mesh: PackedScene = preload("res://comet/AimingMesh.tscn")
 
 @onready var skin: CometSkin = $CometSkin
@@ -33,6 +33,7 @@ var is_aiming: bool = true:
 	set(value):
 		is_aiming = value
 		_physics_on = !is_aiming
+		change_ray_visibility(is_aiming)
 		if is_aiming:
 			activate_camera()
 			camera._curZoom = camera.minZoom
@@ -112,6 +113,11 @@ func setup_ray_pool() -> void:
 		get_tree().root.add_child.call_deferred(inst)
 		ray_dir_visuals.append(inst)
 
+func change_ray_visibility(visibility: bool) -> void:
+	for ray_part: StaticBody3D in ray_dir_visuals:
+		ray_part.visible = visibility
+
+
 func update_ray() -> void:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 	#var ray_origin: Vector3 = get_viewport().get_camera_3d().project_ray_origin(mouse_pos)
@@ -141,21 +147,27 @@ func toggle_highlight(direction: bool) -> void:
 func activate_camera() -> void:
 	camera.make_current()
 
-var tail_visuals: Array[StaticBody3D] = []
+var tail_visuals: Array[TailEntity] = []
 func setup_tail_pool() -> void:
 	for i in range(tail_max_amount):
-		var inst: StaticBody3D = tail_mesh.instantiate()
+		var inst: TailEntity = tail_mesh.instantiate()
 		get_tree().root.add_child.call_deferred(inst)
 		tail_visuals.append(inst)
 		inst.hide()
 
 func draw_tail_from_pool() -> void:
-	var tail_entity: StaticBody3D = tail_visuals.pop_front()
+	var tail_entity: TailEntity = tail_visuals.pop_front()
 	if not tail_entity:
 		return
 	tail_entity.global_position = self.global_position
-	tail_entity.show()
+	tail_entity.reset()
 	tail_visuals.append(tail_entity)
+
+func flush_pools() -> void:
+	for entity: TailEntity in tail_visuals:
+		entity.queue_free()
+	for entity: StaticBody3D in ray_dir_visuals:
+		entity.queue_free()
 
 #endregion
 
@@ -169,6 +181,8 @@ func _unhandled_input(_event):
 		toggle_bullet_time(true)
 	if Input.is_action_just_released("BulletTime"):
 		toggle_bullet_time(false)
+	if Input.is_action_just_pressed("ReturnToComet"):
+		activate_camera()
 
 
 func toggle_bullet_time(toggle: bool) -> void:

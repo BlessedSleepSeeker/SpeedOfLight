@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://w1psgvc7ptbx"]
+[gd_scene load_steps=12 format=3 uid="uid://w1psgvc7ptbx"]
 
 [ext_resource type="Script" uid="uid://b5kehyhy7wmdr" path="res://world/stars/star.gd" id="1_sljp3"]
 [ext_resource type="Material" uid="uid://d3upegy2sk64a" path="res://camera/shaders/highlight_material.tres" id="2_j2866"]
@@ -21,6 +21,63 @@ rings = 8
 [sub_resource type="SphereShape3D" id="SphereShape3D_j2866"]
 radius = 70.0
 
+[sub_resource type="SphereShape3D" id="SphereShape3D_vp5b0"]
+radius = 70.0
+
+[sub_resource type="Animation" id="Animation_vp5b0"]
+resource_name = "deactivated"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(1, 1, 1), Vector3(0.001, 0.001, 0.001)]
+}
+
+[sub_resource type="Animation" id="Animation_itf8h"]
+resource_name = "reactivate"
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0.001, 0.001, 0.001), Vector3(1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_63mt3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_63mt3"]
+_data = {
+&"RESET": SubResource("Animation_63mt3"),
+&"deactivate": SubResource("Animation_vp5b0"),
+&"reactivate": SubResource("Animation_itf8h")
+}
+
 [node name="Star" type="StaticBody3D"]
 script = ExtResource("1_sljp3")
 mass = 1000.0
@@ -36,14 +93,25 @@ mesh = SubResource("SphereMesh_mnlgg")
 
 [node name="MouseArea" type="Area3D" parent="."]
 unique_name_in_owner = true
-collision_layer = 3
+collision_layer = 2
 collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="MouseArea"]
 shape = SubResource("SphereShape3D_j2866")
+
+[node name="Hitbox" type="Area3D" parent="."]
+unique_name_in_owner = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
+shape = SubResource("SphereShape3D_vp5b0")
 
 [node name="CameraOrbit" parent="." instance=ExtResource("3_vp5b0")]
 unique_name_in_owner = true
 maxZoom = 800.0
 minZoom = 60.0
 zoomStep = 20.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_63mt3")
+}
