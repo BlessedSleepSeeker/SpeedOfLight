@@ -5,20 +5,22 @@ class_name Comet
 @export var pause_movement: bool = false
 # Speed per tick * delta
 @export var speed: float = 10
-@export var initial_velocity: Vector3 = Vector3(0.5, -1, 1)
+@export var initial_velocity: Vector3 = Vector3(2, -2, 2)
 
 @export var draw_tail: bool = true
 @export var tail_mesh: PackedScene = preload("res://comet/TailMesh.tscn")
+@export var tail_max_amount: int = 1000
 
-@export var highlight_color: Color = Color8(255, 255, 255)
-@export var highlight_color_off: Color = Color8(255, 255, 255, 0)
-@export var highlight_tween_time: float = 0.4
+@export var ray_length: float = 20
+@export var ray_direction_amount: int = 20
+@export var aiming_mesh: PackedScene = preload("res://comet/AimingMesh.tscn")
 
-@onready var skin: Node3D = $MeshRotator
+@onready var skin: CometSkin = $CometSkin
+@onready var hitbox: Area3D = $Hitbox
 @onready var camera: CameraOrbit = %CameraOrbit
-@onready var highlight_material: ShaderMaterial = %MeshInstance3D.mesh.material.next_pass
+@onready var direction_raycast: RayCast3D = %DirectionRaycast
 
-const GRAVITY: float = 6.6743 * pow(10,-1)
+const GRAVITY: float = 1#6.6743 * pow(10,-1)
 
 var is_selected: bool = false:
 	set(value):
@@ -27,12 +29,21 @@ var is_selected: bool = false:
 
 var _physics_on: bool = true
 
-var is_aiming: bool = true
+var is_aiming: bool = true:
+	set(value):
+		is_aiming = value
+		_physics_on = !is_aiming
+		if is_aiming:
+			activate_camera()
+			camera._curZoom = camera.minZoom
 
 func _ready():
+	is_aiming = true
 	self.velocity = initial_velocity
 	activate_camera()
-	highlight_material.set_shader_parameter("outline_color", highlight_color_off)
+	setup_ray_pool()
+	setup_tail_pool()
+	hitbox.area_entered.connect(_on_entity_collided)
 	self.mouse_entered.connect(on_mouse_state_changed.bind(true))
 	self.mouse_exited.connect(on_mouse_state_changed.bind(false))
 
@@ -66,20 +77,56 @@ func calculate_distance(entity: Node3D) -> float:
 	return self.position.distance_squared_to(entity.position)
 
 func apply_pull(gravity_pull: Vector3) -> void:
-	self.velocity += gravity_pull
+	if _physics_on:
+		self.velocity += gravity_pull
 
 func _physics_process(_delta):
+	if is_aiming:
+		update_ray()
 	if _physics_on:
 		skin.look_at(velocity)
 		move_and_collide(self.velocity)
 		if draw_tail == true:
-			var inst = tail_mesh.instantiate()
-			get_tree().root.add_child(inst)
-			inst.global_position = self.global_position
+			draw_tail_from_pool()
 
 func set_physics_toggle(value: bool) -> void:
 	if is_aiming == false:
 		_physics_on = value
+
+func shoot_self() -> void:
+	is_aiming = false
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	var new_direction: Vector3 = get_viewport().get_camera_3d().project_ray_normal(mouse_pos)
+	apply_current_velocity_to_new_direction(new_direction)
+
+func apply_current_velocity_to_new_direction(new_direction: Vector3):
+	var current_speed: float = get_speed() / 3
+	self.velocity = new_direction * current_speed
+#endregion
+
+#region Game Mechanics
+var ray_dir_visuals: Array[StaticBody3D] = []
+func setup_ray_pool() -> void:
+	for i in range(ray_direction_amount):
+		var inst = aiming_mesh.instantiate()
+		get_tree().root.add_child.call_deferred(inst)
+		ray_dir_visuals.append(inst)
+
+func update_ray() -> void:
+	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
+	#var ray_origin: Vector3 = get_viewport().get_camera_3d().project_ray_origin(mouse_pos)
+	#print(get_viewport().get_camera_3d().project_ray_normal(mouse_pos))
+	var ray_target: Vector3 = self.global_position + (get_viewport().get_camera_3d().project_ray_normal(mouse_pos) * ray_length)
+	direction_raycast.target_position = ray_target
+	var ray_direction = get_viewport().get_camera_3d().project_ray_normal(mouse_pos)#direction_raycast.target_position.normalized()
+	var i = 1
+	for node: StaticBody3D in ray_dir_visuals:
+		if node.is_inside_tree():
+			node.global_position = self.global_position + (ray_direction * (i * (ray_length / ray_direction_amount)))
+		i += 1
+
+func _on_entity_collided(_area: Area3D) -> void:
+	is_aiming = true
 
 #endregion
 
@@ -89,18 +136,35 @@ func on_mouse_state_changed(value: bool) -> void:
 	is_selected = value
 
 func toggle_highlight(direction: bool) -> void:
-	var tween: Tween = create_tween()
-	tween.tween_property(highlight_material, "shader_parameter/outline_color", highlight_color if direction else highlight_color_off, highlight_tween_time)
+	skin.toggle_highlight(direction)
 
 func activate_camera() -> void:
 	camera.make_current()
+
+var tail_visuals: Array[StaticBody3D] = []
+func setup_tail_pool() -> void:
+	for i in range(tail_max_amount):
+		var inst: StaticBody3D = tail_mesh.instantiate()
+		get_tree().root.add_child.call_deferred(inst)
+		tail_visuals.append(inst)
+		inst.hide()
+
+func draw_tail_from_pool() -> void:
+	var tail_entity: StaticBody3D = tail_visuals.pop_front()
+	if not tail_entity:
+		return
+	tail_entity.global_position = self.global_position
+	tail_entity.show()
+	tail_visuals.append(tail_entity)
+
 #endregion
 
 #region Input
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("TogglePhysics"):
-		_physics_on = !_physics_on
+		if !self.is_aiming:
+			_physics_on = !_physics_on
 	if Input.is_action_just_pressed("BulletTime"):
 		toggle_bullet_time(true)
 	if Input.is_action_just_released("BulletTime"):
@@ -108,7 +172,6 @@ func _unhandled_input(_event):
 
 
 func toggle_bullet_time(toggle: bool) -> void:
-	print("toggled bullet time : %s" % toggle)
 	if toggle:
 		var tween: Tween = get_tree().create_tween()
 		tween.tween_property(Engine, "time_scale", 0.1, 0.4).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)

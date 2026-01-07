@@ -8,7 +8,7 @@ var _physics_on: bool = true:
 		toggle_physics(_physics_on)
 
 func _ready():
-	fade_timer.timeout.connect(fade_away)
+	pass#fade_timer.timeout.connect(fade_away)
 
 
 func toggle_physics(value: bool) -> void:

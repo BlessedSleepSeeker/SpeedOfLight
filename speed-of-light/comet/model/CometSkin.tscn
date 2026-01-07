@@ -1,0 +1,84 @@
+[gd_scene load_steps=9 format=3 uid="uid://dy7x3knm44k6k"]
+
+[ext_resource type="Script" uid="uid://o7mjphf3reax" path="res://comet/model/comet_skin.gd" id="1_ali11"]
+[ext_resource type="PackedScene" uid="uid://juv6l4lflylj" path="res://comet/model/CometModel.gltf" id="2_ali11"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ali11"]
+animation = &"Idle"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id="AnimationNodeStateMachineTransition_sosry"]
+advance_mode = 2
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_q43ii"]
+states/Idle/node = SubResource("AnimationNodeAnimation_ali11")
+states/Idle/position = Vector2(371, 52)
+states/Start/position = Vector2(174, 72)
+transitions = ["Start", "Idle", SubResource("AnimationNodeStateMachineTransition_sosry")]
+graph_offset = Vector2(-8, -47)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ali11"]
+transparency = 1
+shading_mode = 2
+vertex_color_use_as_albedo = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_sosry"]
+material = SubResource("StandardMaterial3D_ali11")
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="Gradient" id="Gradient_q43ii"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.8287671, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[node name="CometSkin" type="Node3D"]
+script = ExtResource("1_ali11")
+
+[node name="CometMesh" parent="." instance=ExtResource("2_ali11")]
+unique_name_in_owner = true
+
+[node name="body" parent="CometMesh/character" index="0"]
+transform = Transform3D(0.7030064, 0.7105988, -0.028830603, -0.7111835, 0.7024286, -0.028498635, 3.3900142e-07, 0.04053857, 0.999178, 0, 0.22916667, 0)
+
+[node name="left_leg" parent="CometMesh/character/body" index="1"]
+transform = Transform3D(0.5783033, -0.81515104, 0.03307205, 0.8158218, 0.5778279, -0.023443863, 3.3713877e-07, 0.040538568, 0.99917793, 0, -0.19791667, -0.09375)
+
+[node name="left_feet" parent="CometMesh/character/body/left_leg" index="1"]
+transform = Transform3D(0.21643971, 0.9762114, 0.012849219, -0.976296, 0.21642096, 0.0028486045, -2.3283064e-10, -0.013161194, 0.9999133, 0, -0.109375, 0)
+
+[node name="right_leg" parent="CometMesh/character/body" index="2"]
+transform = Transform3D(-0.5783033, -0.81515104, 0.03307205, 0.8158218, -0.5778279, 0.023443863, -3.3713877e-07, 0.040538568, 0.99917793, 0.0625, -0.16666667, 0.09375)
+
+[node name="right_feet" parent="CometMesh/character/body/right_leg" index="1"]
+transform = Transform3D(0.5, 0.8659503, 0.011397928, -0.8660254, 0.4999567, 0.006580596, -1.8626451e-09, -0.013161192, 0.9999134, 0, -0.109375, 0)
+
+[node name="head" parent="CometMesh/character/body" index="3"]
+transform = Transform3D(0.8158218, -0.577828, 0.023443865, 0.57830334, 0.81515115, -0.03307205, -3.3900142e-07, 0.04053857, 0.99917793, 0, 0.17708333, 0)
+
+[node name="right_arm" parent="CometMesh/character/body" index="4"]
+transform = Transform3D(0.89736897, 0.01844507, 0.44089487, 0.26910755, 0.7689627, -0.5798941, -0.34972793, 0.6390273, 0.6850797, 0, 0.098958336, 0.125)
+
+[node name="left_arm" parent="CometMesh/character/body" index="5"]
+transform = Transform3D(0.7410142, 0.27990946, -0.6103675, -0.07435401, 0.9375894, 0.33970165, 0.6673598, -0.20634049, 0.7155797, 0, 0.098958336, -0.125)
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+unique_name_in_owner = true
+root_node = NodePath("%CometMesh")
+tree_root = SubResource("AnimationNodeStateMachine_q43ii")
+anim_player = NodePath("../CometMesh/AnimationPlayer")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="."]
+emitting = false
+amount = 600
+lifetime = 60.0
+draw_order = 1
+mesh = SubResource("BoxMesh_sosry")
+direction = Vector3(0, -1, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 0.1
+initial_velocity_max = 0.1
+angle_min = 44.5
+angle_max = 133.6
+color_ramp = SubResource("Gradient_q43ii")
+
+[editable path="CometMesh"]

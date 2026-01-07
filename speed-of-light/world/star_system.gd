@@ -31,6 +31,8 @@ func _physics_process(_delta):
 	debug_hud.update_pfps()
 
 func toggle_physics():
+	if comet.is_aiming:
+		return
 	_physics_on = !_physics_on
 	debug_hud.update_is_paused(!_physics_on)
 #endregion
@@ -46,7 +48,7 @@ func _process(_delta):
 #region Click
 func check_for_click() -> void:
 	if comet.is_aiming:
-		pass
+		comet.shoot_self()
 		return
 	if comet.is_selected:
 		_on_entity_selected(comet)
