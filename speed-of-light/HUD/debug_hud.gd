@@ -10,6 +10,9 @@ class_name DebugHUD
 @export var is_paused_template: String = "%s"
 @onready var is_paused_label: RichTextLabel = %IsPausedLabel
 
+@export var position_template: String = "Position [%.02f : %.02f : %.02f]"
+@onready var position_label: RichTextLabel = %PositionLabel
+
 @onready var prev_physics_frame: int = 0
 
 func update_fps() -> void:
@@ -25,6 +28,9 @@ func update_is_paused(value: bool) -> void:
 		is_paused_label.text = "[color=dark_red]SIMULATION PAUSED[/color]"
 	else:
 		is_paused_label.text = "[color=forest_green]SIMULATION RUNNING[/color]"
+
+func update_position(value: Vector3) -> void:
+	position_label.text = position_template % [value.x, value.y, value.z]
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("ToggleDebug"):

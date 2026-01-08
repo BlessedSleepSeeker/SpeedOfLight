@@ -6,6 +6,7 @@ class_name Comet
 # Speed per tick * delta
 @export var speed: float = 10
 @export var initial_velocity: Vector3 = Vector3(2, -2, 2)
+@export var max_distance_for_gravity: float = 10000000
 
 @export var draw_tail: bool = true
 @export var tail_mesh: PackedScene = preload("res://comet/TailMesh.tscn")
@@ -20,7 +21,7 @@ class_name Comet
 @onready var camera: CameraOrbit = %CameraOrbit
 @onready var direction_raycast: RayCast3D = %DirectionRaycast
 
-const GRAVITY: float = 1#6.6743 * pow(10,-1)
+const GRAVITY: float = 6.6743 * pow(10,-1)
 
 var is_selected: bool = false:
 	set(value):
@@ -37,6 +38,8 @@ var is_aiming: bool = true:
 		if is_aiming:
 			activate_camera()
 			camera._curZoom = camera.minZoom
+
+var prev_velocity: Vector3 = Vector3.ZERO
 
 func _ready():
 	is_aiming = true
@@ -57,13 +60,15 @@ func get_direction() -> Vector3:
 #endregion
 
 #region Gravity Physics
-func calculate_gravity_pull(puller: GravitationalPuller) -> Vector3:
+func calculate_gravity_pull(puller: CelestialBody) -> Vector3:
 	##print("Calculating gravity pull for %s" % puller.name)
 	var m1m2: float = self.mass * puller.mass
 	#print("mass: %f" % m1m2)
 	var distance: float = calculate_distance(puller)
+	if distance > max_distance_for_gravity:
+		return Vector3.ZERO
 	#print("distance: %f" % distance)
-	var grav_before_const: float = m1m2 / distance
+	var grav_before_const: float = m1m2 / (distance ** 2)
 	#print("grav_before_const: %f" % grav_before_const)
 	var gravity_force: float = GRAVITY * grav_before_const
 	#print(gravity_force)
@@ -75,7 +80,7 @@ func calculate_gravity_pull(puller: GravitationalPuller) -> Vector3:
 	return integrated_force
 
 func calculate_distance(entity: Node3D) -> float:
-	return self.position.distance_squared_to(entity.position)
+	return self.position.distance_to(entity.position)
 
 func apply_pull(gravity_pull: Vector3) -> void:
 	if _physics_on:
@@ -85,8 +90,9 @@ func _physics_process(_delta):
 	if is_aiming:
 		update_ray()
 	if _physics_on:
-		skin.look_at(velocity)
+		skin.look_at_velocity(velocity, prev_velocity)
 		move_and_collide(self.velocity)
+		prev_velocity = self.velocity
 		if draw_tail == true:
 			draw_tail_from_pool()
 

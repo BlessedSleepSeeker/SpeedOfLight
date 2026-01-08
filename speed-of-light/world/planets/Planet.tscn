@@ -1,6 +1,6 @@
 [gd_scene load_steps=15 format=3 uid="uid://dcx4pnt0kt3gn"]
 
-[ext_resource type="Script" uid="uid://b5kehyhy7wmdr" path="res://world/stars/star.gd" id="1_5m2jx"]
+[ext_resource type="Script" uid="uid://ddoycdpgl8wya" path="res://world/planets/planet.gd" id="1_n3pod"]
 [ext_resource type="Material" uid="uid://d3upegy2sk64a" path="res://camera/shaders/highlight_material.tres" id="2_bji2r"]
 [ext_resource type="PackedScene" uid="uid://pqykoxve28eu" path="res://camera/CameraOrbit.tscn" id="2_n3pod"]
 
@@ -97,10 +97,14 @@ _data = {
 
 [node name="Planet" type="StaticBody3D"]
 collision_layer = 3
-script = ExtResource("1_5m2jx")
+script = ExtResource("1_n3pod")
 randomize_rotation_on_load = true
 mass = 100.0
+min_mass = 100.0
+max_mass = 130.0
 deactivation_time_on_hit = 30.0
+min_allowed_distance_from_others = 800.0
+max_allowed_distance_from_others = 1200.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
@@ -121,7 +125,6 @@ shape = SubResource("SphereShape3D_pkd2e")
 [node name="Hitbox" type="Area3D" parent="."]
 unique_name_in_owner = true
 transform = Transform3D(4, 0, 0, 0, 4, 0, 0, 0, 4, 0, 0, 0)
-collision_mask = 0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Hitbox"]
 shape = SubResource("SphereShape3D_5m2jx")

@@ -1,0 +1,47 @@
+[gd_scene load_steps=9 format=3 uid="uid://c47rfwggaxk0r"]
+
+[ext_resource type="Script" uid="uid://d0uj3if4qge7w" path="res://world/universe/universe.gd" id="1_bjgu5"]
+[ext_resource type="Shader" uid="uid://cooa1b3ar17sw" path="res://world/sky/starry_sky.gdshader" id="2_kvg8b"]
+[ext_resource type="PackedScene" uid="uid://bs8425q4yrea2" path="res://comet/Comet.tscn" id="3_3wwxw"]
+[ext_resource type="PackedScene" uid="uid://c7q63bor5yfyf" path="res://HUD/CometHUD.tscn" id="4_3wwxw"]
+[ext_resource type="PackedScene" uid="uid://cdb7a5ryj70ke" path="res://HUD/DebugHUD.tscn" id="5_yuohk"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_yuohk"]
+shader = ExtResource("2_kvg8b")
+shader_parameter/sky_color = Color(0.03, 0.05, 0.11, 1)
+shader_parameter/star_base_color = Color(0.8, 1, 0.3, 1)
+shader_parameter/star_hue_offset = 0.6
+shader_parameter/star_intensity = 0.08
+shader_parameter/star_twinkle_speed = 0.8
+shader_parameter/star_twinkle_intensity = 0.2
+shader_parameter/layer_scale = 20.0
+shader_parameter/layer_scale_step = 10.0
+shader_parameter/layers_count = 3
+
+[sub_resource type="Sky" id="Sky_rca7r"]
+sky_material = SubResource("ShaderMaterial_yuohk")
+
+[sub_resource type="Environment" id="Environment_kgupo"]
+background_mode = 2
+sky = SubResource("Sky_rca7r")
+ambient_light_source = 1
+reflected_light_source = 1
+
+[node name="Universe" type="Node3D"]
+script = ExtResource("1_bjgu5")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_kgupo")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="WorldEnvironment"]
+transform = Transform3D(0.7423487, 0.18235253, 0.6447217, -0.6571153, 0.38605165, 0.6474285, -0.13083562, -0.90427417, 0.40641156, 0, 448.87976, 0)
+sky_mode = 1
+
+[node name="Comet" parent="." instance=ExtResource("3_3wwxw")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155.96133, 71.02955, -177.66962)
+
+[node name="CometHUDLayer" parent="." instance=ExtResource("4_3wwxw")]
+unique_name_in_owner = true
+
+[node name="DebugHUDLayer" parent="." instance=ExtResource("5_yuohk")]
+unique_name_in_owner = true

@@ -30,7 +30,15 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 bbcode_enabled = true
-text = "simulation state"
+text = "Simulation State"
+fit_content = true
+
+[node name="PositionLabel" type="RichTextLabel" parent="Margin/VBoxContainer/HBoxContainer/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+bbcode_enabled = true
+text = "Position"
 fit_content = true
 
 [node name="FPSLabel" type="RichTextLabel" parent="Margin/VBoxContainer/HBoxContainer/HBoxContainer"]

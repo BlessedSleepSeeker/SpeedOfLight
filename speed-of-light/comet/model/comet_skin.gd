@@ -26,7 +26,7 @@ func add_highlight_material_on_next_pass() -> void:
 		if child is MeshInstance3D:
 			var material: Material = child.mesh.get("surface_0/material")
 			while material:
-				if material.next_pass == null:
+				if material.next_pass == null && material != highlight_material:
 					material.next_pass = highlight_material
 					break
 				material = material.next_pass
@@ -35,9 +35,12 @@ func toggle_highlight(direction: bool) -> void:
 	var tween: Tween = create_tween()
 	tween.tween_property(highlight_material, "shader_parameter/outline_color", highlight_color if direction else highlight_color_off, highlight_tween_time)
 
-func look_at_velocity(velocity: Vector3, rotation_speed: float, _delta: float) -> void:
-	var node: Node3D = Node3D.new()
-	if velocity != Vector3.ZERO:
-		node.look_at_from_position(self.global_position, global_transform.origin + velocity, Vector3.MODEL_TOP, true)
-		var tween: Tween = create_tween()
-		tween.tween_property(self, "rotation", node.rotation, rotation_speed * _delta)
+func look_at_velocity(velocity: Vector3, prev_velocity: Vector3) -> void:
+	var _aiming_to: Vector3 = (velocity - prev_velocity)
+	#self.rotation = look_at_from_position()
+	# var node: Node3D = Node3D.new()
+	# if velocity != Vector3.ZERO:
+	#self.look_at_from_position(self.global_position, aiming_to, Vector3.MODEL_FRONT, true)
+	self.look_at(velocity)
+	# var tween: Tween = create_tween()
+	# tween.tween_property(self, "rotation", node.rotation, rotation_speed * _delta)

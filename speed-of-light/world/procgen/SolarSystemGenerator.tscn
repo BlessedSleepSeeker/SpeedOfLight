@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://46iefn0us2ew"]
+
+[ext_resource type="Script" uid="uid://cil4axlyxaupv" path="res://world/procgen/solar_system_generator.gd" id="1_5lwe4"]
+
+[node name="SolarSystemGenerator" type="Node3D"]
+script = ExtResource("1_5lwe4")
