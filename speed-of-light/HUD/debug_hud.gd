@@ -13,6 +13,9 @@ class_name DebugHUD
 @export var position_template: String = "Position [%.02f : %.02f : %.02f]"
 @onready var position_label: RichTextLabel = %PositionLabel
 
+@export var gravity_template: String = "%s = [%f : %f : %f]\n"
+@onready var gravity_label: RichTextLabel = %GravityAppliedByLabel
+
 @onready var prev_physics_frame: int = 0
 
 func update_fps() -> void:
@@ -31,6 +34,12 @@ func update_is_paused(value: bool) -> void:
 
 func update_position(value: Vector3) -> void:
 	position_label.text = position_template % [value.x, value.y, value.z]
+
+func update_gravity(source: Dictionary) -> void:
+	var gravity_string: String = ""
+	for c_body: CelestialBody in source:
+		gravity_string += gravity_template % [c_body.name, source[c_body].x, source[c_body].y, source[c_body].z]
+	#gravity_label.text = gravity_string
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("ToggleDebug"):

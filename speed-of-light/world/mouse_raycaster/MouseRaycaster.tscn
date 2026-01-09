@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://djl0k2l0ko8qt"]
 
-[ext_resource type="Script" uid="uid://dl0a1vrute6ea" path="res://world/camera_selector/camera_selector.gd" id="1_78r0f"]
+[ext_resource type="Script" uid="uid://dl0a1vrute6ea" path="res://world/mouse_raycaster/mouse_raycaster.gd" id="1_78r0f"]
 
-[node name="CameraSelector" type="Node"]
+[node name="MouseRaycaster" type="Node3D"]
 script = ExtResource("1_78r0f")
 
 [node name="RayCast3D" type="RayCast3D" parent="."]

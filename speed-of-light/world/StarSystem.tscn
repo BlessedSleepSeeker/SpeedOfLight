@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://w1psgvc7ptbx" path="res://world/stars/Star.tscn" id="3_6cfv3"]
 [ext_resource type="PackedScene" uid="uid://dcx4pnt0kt3gn" path="res://world/planets/Planet.tscn" id="4_rca7r"]
 [ext_resource type="PackedScene" uid="uid://c7q63bor5yfyf" path="res://HUD/CometHUD.tscn" id="5_xf21s"]
-[ext_resource type="PackedScene" uid="uid://djl0k2l0ko8qt" path="res://world/camera_selector/CameraSelector.tscn" id="7_atutu"]
+[ext_resource type="PackedScene" uid="uid://djl0k2l0ko8qt" path="res://world/mouse_raycaster/MouseRaycaster.tscn" id="7_atutu"]
 [ext_resource type="PackedScene" uid="uid://cdb7a5ryj70ke" path="res://HUD/DebugHUD.tscn" id="7_iuvtf"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6cfv3"]

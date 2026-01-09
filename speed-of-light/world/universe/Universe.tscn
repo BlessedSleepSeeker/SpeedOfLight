@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://c47rfwggaxk0r"]
+[gd_scene load_steps=10 format=3 uid="uid://c47rfwggaxk0r"]
 
 [ext_resource type="Script" uid="uid://d0uj3if4qge7w" path="res://world/universe/universe.gd" id="1_bjgu5"]
 [ext_resource type="Shader" uid="uid://cooa1b3ar17sw" path="res://world/sky/starry_sky.gdshader" id="2_kvg8b"]
 [ext_resource type="PackedScene" uid="uid://bs8425q4yrea2" path="res://comet/Comet.tscn" id="3_3wwxw"]
 [ext_resource type="PackedScene" uid="uid://c7q63bor5yfyf" path="res://HUD/CometHUD.tscn" id="4_3wwxw"]
 [ext_resource type="PackedScene" uid="uid://cdb7a5ryj70ke" path="res://HUD/DebugHUD.tscn" id="5_yuohk"]
+[ext_resource type="PackedScene" uid="uid://djl0k2l0ko8qt" path="res://world/mouse_raycaster/MouseRaycaster.tscn" id="6_yuohk"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_yuohk"]
 shader = ExtResource("2_kvg8b")
@@ -44,4 +45,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155.96133, 71.02955, -177.669
 unique_name_in_owner = true
 
 [node name="DebugHUDLayer" parent="." instance=ExtResource("5_yuohk")]
+unique_name_in_owner = true
+
+[node name="MouseRaycaster" parent="." instance=ExtResource("6_yuohk")]
 unique_name_in_owner = true

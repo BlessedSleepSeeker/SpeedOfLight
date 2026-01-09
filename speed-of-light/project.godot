@@ -79,7 +79,7 @@ ResetScene={
 [layer_names]
 
 3d_physics/layer_1="body_collisions"
-3d_physics/layer_2="ray_collision"
+3d_physics/layer_2="mouse_collision"
 
 [rendering]
 

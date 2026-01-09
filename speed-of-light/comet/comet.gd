@@ -187,8 +187,6 @@ func _unhandled_input(_event):
 		toggle_bullet_time(true)
 	if Input.is_action_just_released("BulletTime"):
 		toggle_bullet_time(false)
-	if Input.is_action_just_pressed("ReturnToComet"):
-		activate_camera()
 
 
 func toggle_bullet_time(toggle: bool) -> void:

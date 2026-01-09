@@ -55,8 +55,6 @@ func generate_system() -> void:
 	boids_loop(0)
 	generation_finished.emit()
 
-
-
 func generate_stars() -> void:
 	if print_verbose:
 		print("Generating Stars for %s !" % self.name)
@@ -67,10 +65,13 @@ func generate_stars() -> void:
 		star_inst.generate()
 		stars.append.call_deferred(star_inst)
 		self.call_deferred("add_child", star_inst)
-		#if verbose_print:
-		print("Generated star %s %d" % [star_inst.name, iter])
-		if iter != 0:
+		if verbose_print:
+			print("Generated star %s %d" % [star_inst.name, iter])
+		if iter == 0:
+			star_inst.randomize_offset()
+		else:
 			celestial_bodies_without_center_star.append.call_deferred(star_inst)
+
 		iter += 1
 	gen_mutex.unlock()
 
@@ -105,7 +106,7 @@ func place_planets() -> void:
 	gen_mutex.unlock()
 
 func boids_loop(loop_number: int) -> void:
-	#await get_tree().create_timer(0.2).timeout
+	#await get_tree().create_timer(0.01).timeout
 	if verbose_print:
 		print("Boids Loop %d" % loop_number)
 	if loop_number >= max_boids_loops:

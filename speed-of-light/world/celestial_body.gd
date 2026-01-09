@@ -31,17 +31,19 @@ class_name CelestialBody
 
 var is_active: bool = true
 
-var is_selected: bool = false:
+var is_camera_centered_on: bool = false
+
+var is_hovered: bool = false:
 	set(value):
 		toggle_highlight(value)
-		is_selected = value
+		is_hovered = value
 
 func _ready():
 	self.add_to_group("CelestialBody")
 	hitbox.body_entered.connect(on_comet_entered)
 	highlight_material.set_shader_parameter("outline_color", highlight_color_off)
-	mouse_area.mouse_entered.connect(on_mouse_state_changed.bind(true))
-	mouse_area.mouse_exited.connect(on_mouse_state_changed.bind(false))
+	#mouse_area.mouse_entered.connect(on_mouse_state_changed.bind(true))
+	#mouse_area.mouse_exited.connect(on_mouse_state_changed.bind(false))
 	if randomize_rotation_on_load:
 		randomize_rotation()
 
@@ -66,9 +68,9 @@ func toggle_highlight(direction: bool) -> void:
 
 func on_mouse_state_changed(value: bool) -> void:
 	if is_active:
-		is_selected = value
-	elif not is_active && is_selected:
-		is_selected = false
+		is_hovered = value
+	elif not is_active && is_hovered:
+		is_hovered = false
 
 #endregion
 
@@ -76,6 +78,14 @@ func on_mouse_state_changed(value: bool) -> void:
 #region Procedural Generation
 func generate() -> void:
 	mass = roundf(RngManager.randf_range_safe(min_mass, max_mass))
+	generate_name()
+
+var characters: String = "ABCDEFGHIJKLMOPQRSTUVWXYZ"
+func generate_name() -> void:
+	var _id = RngManager.randi_range_safe(1, 1000000)
+	var descriptor1 = characters[RngManager.randi_range_safe(0, characters.length() - 1)]
+	var descriptor2 = characters[RngManager.randi_range_safe(0, characters.length() - 1)]
+	self.name = "%s%s %06d" % [descriptor1, descriptor2, _id]
 
 func randomize_rotation() -> void:
 	rotation.x = RngManager.randf_range_safe(0, 1)
