@@ -36,7 +36,7 @@ func toggle_highlight(direction: bool) -> void:
 	tween.tween_property(highlight_material, "shader_parameter/outline_color", highlight_color if direction else highlight_color_off, highlight_tween_time)
 
 func look_at_velocity(velocity: Vector3, prev_velocity: Vector3) -> void:
-	var _aiming_to: Vector3 = (velocity - prev_velocity)
+	var _aiming_to: Vector3 = (prev_velocity - velocity)
 	#self.rotation = look_at_from_position()
 	# var node: Node3D = Node3D.new()
 	# if velocity != Vector3.ZERO:

@@ -18,6 +18,8 @@ class_name DebugHUD
 
 @onready var prev_physics_frame: int = 0
 
+signal draw_line_to(body_position: Vector3)
+
 func update_fps() -> void:
 	fps_label.text = fps_template % Engine.get_frames_per_second()
 
@@ -36,10 +38,26 @@ func update_position(value: Vector3) -> void:
 	position_label.text = position_template % [value.x, value.y, value.z]
 
 func update_gravity(source: Dictionary) -> void:
+	var max_line: int = 20
 	var gravity_string: String = ""
-	for c_body: CelestialBody in source:
-		gravity_string += gravity_template % [c_body.name, source[c_body].x, source[c_body].y, source[c_body].z]
-	#gravity_label.text = gravity_string
+	var ordered_values: Array = source.values().map(get_distance)
+	ordered_values.sort()
+	ordered_values.reverse()
+	var i: int = 0
+	for value in ordered_values:
+		for c_body: CelestialBody in source:
+			if get_distance(source[c_body]) == value:
+				#gravity_string += gravity_template % [c_body.name, source[c_body].x, source[c_body].y, source[c_body].z]
+				gravity_string += "%s (%f) = %f\n" % [c_body.name, c_body.mass, value]
+				draw_line_to.emit(c_body.global_position, value)
+		if i == max_line:
+			break
+		i += 1
+	gravity_label.text = gravity_string
+
+func get_distance(vector: Vector3) -> float:
+	return vector.distance_to(Vector3.ZERO)
+
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("ToggleDebug"):

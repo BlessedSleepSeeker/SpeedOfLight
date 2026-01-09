@@ -26,7 +26,6 @@ func update_looking_at(body: Node3D, comet_position: Vector3) -> void:
 		looking_at_lbl.text = ""
 
 func update_focused_on(body: Node3D) -> void:
-	print("updating focused on")
 	var tween: Tween = create_tween()
 	tween.tween_property(focused_on_lbl, "text", focused_on_template % body.name, 0.5)
 	#focused_on_lbl.text = focused_on_template % body.name

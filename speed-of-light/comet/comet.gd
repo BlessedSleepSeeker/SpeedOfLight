@@ -5,8 +5,8 @@ class_name Comet
 @export var pause_movement: bool = false
 # Speed per tick * delta
 @export var speed: float = 10
-@export var initial_velocity: Vector3 = Vector3(2, -2, 2)
-@export var max_distance_for_gravity: float = 10000000
+@export var initial_velocity: Vector3 = Vector3(1, 1, 1)
+@export var max_distance_for_gravity: float = 0
 
 @export var draw_tail: bool = true
 @export var tail_mesh: PackedScene = preload("res://comet/TailMesh.tscn")
@@ -21,28 +21,30 @@ class_name Comet
 @onready var camera: CameraOrbit = %CameraOrbit
 @onready var direction_raycast: RayCast3D = %DirectionRaycast
 
-const GRAVITY: float = 6.6743 * pow(10,-1)
+signal aiming_start
+signal aiming_end
+
+const GRAVITY: float = 1#6.6743 * pow(10,-1)
 
 var is_selected: bool = false:
 	set(value):
 		toggle_highlight(value)
 		is_selected = value
 
-var _physics_on: bool = true
-
 var is_aiming: bool = true:
 	set(value):
 		is_aiming = value
-		_physics_on = !is_aiming
 		change_ray_visibility(is_aiming)
 		if is_aiming:
 			activate_camera()
 			camera._curZoom = camera.minZoom
+			aiming_start.emit()
+		else:
+			aiming_end.emit()
 
 var prev_velocity: Vector3 = Vector3.ZERO
 
 func _ready():
-	is_aiming = true
 	self.velocity = initial_velocity
 	activate_camera()
 	setup_ray_pool()
@@ -68,7 +70,7 @@ func calculate_gravity_pull(puller: CelestialBody) -> Vector3:
 	if distance > max_distance_for_gravity:
 		return Vector3.ZERO
 	#print("distance: %f" % distance)
-	var grav_before_const: float = m1m2 / (distance ** 2)
+	var grav_before_const: float = m1m2 / pow(distance, 2)
 	#print("grav_before_const: %f" % grav_before_const)
 	var gravity_force: float = GRAVITY * grav_before_const
 	#print(gravity_force)
@@ -80,25 +82,21 @@ func calculate_gravity_pull(puller: CelestialBody) -> Vector3:
 	return integrated_force
 
 func calculate_distance(entity: Node3D) -> float:
-	return self.position.distance_to(entity.position)
+	return self.global_position.distance_to(entity.global_position)
 
 func apply_pull(gravity_pull: Vector3) -> void:
-	if _physics_on:
-		self.velocity += gravity_pull
+	self.velocity += gravity_pull
 
 func _physics_process(_delta):
 	if is_aiming:
 		update_ray()
-	if _physics_on:
-		skin.look_at_velocity(velocity, prev_velocity)
-		move_and_collide(self.velocity)
-		prev_velocity = self.velocity
-		if draw_tail == true:
-			draw_tail_from_pool()
 
-func set_physics_toggle(value: bool) -> void:
-	if is_aiming == false:
-		_physics_on = value
+func delegated_physics(_delta: float) -> void:
+	skin.look_at_velocity(velocity, prev_velocity)
+	move_and_collide(self.velocity)
+	prev_velocity = self.velocity
+	if draw_tail == true:
+		draw_tail_from_pool()
 
 func shoot_self() -> void:
 	is_aiming = false
@@ -107,7 +105,7 @@ func shoot_self() -> void:
 	apply_current_velocity_to_new_direction(new_direction)
 
 func apply_current_velocity_to_new_direction(new_direction: Vector3):
-	var current_speed: float = get_speed() / 3
+	var current_speed: float = get_speed()
 	self.velocity = new_direction * current_speed
 #endregion
 
@@ -122,7 +120,6 @@ func setup_ray_pool() -> void:
 func change_ray_visibility(visibility: bool) -> void:
 	for ray_part: StaticBody3D in ray_dir_visuals:
 		ray_part.visible = visibility
-
 
 func update_ray() -> void:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
@@ -180,9 +177,6 @@ func flush_pools() -> void:
 #region Input
 
 func _unhandled_input(_event):
-	if Input.is_action_just_pressed("TogglePhysics"):
-		if !self.is_aiming:
-			_physics_on = !_physics_on
 	if Input.is_action_just_pressed("BulletTime"):
 		toggle_bullet_time(true)
 	if Input.is_action_just_released("BulletTime"):

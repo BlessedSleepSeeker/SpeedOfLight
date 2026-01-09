@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://doaisk3tsvws0"]
+
+[ext_resource type="Script" uid="uid://bukqamisfbcrd" path="res://autoloads/volume_manager.gd" id="1_uyb1d"]
+
+[node name="VolumeManager" type="Node"]
+script = ExtResource("1_uyb1d")
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+bus = &"BGM"
+
+[node name="MusicPlayer2" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+bus = &"BGM"
